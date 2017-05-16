@@ -10,6 +10,7 @@
 
     <!--jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -31,6 +32,20 @@
 </head>
 <body>
 <div class="container-fluid theme-showcase">
+
+    <div class="help-block"></div>
+    <h3>Личный кабинет Клиента Оператора Кредитных Заявок -<br>Крутилка</h3>
+    <div class="help-block"></div>
+
+    <div class="row">
+        <button type="button" class="btn btn-info" id="order-list">Список заявок</button>
+        <button type="button" class="btn btn-info" id="roller">Крутилка</button>
+        <button type="button" class="btn btn-info" id="scoring-results">Результаты скоринга</button>
+        <div class="col-md-1"></div>
+        <button id="unlogin-button" type="button" class="btn btn-secondary">Разлогиниться</button>
+    </div>
+    <div class="help-block"></div>
+
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h1>Ввод данных о юр. лице.</h1>
@@ -188,6 +203,50 @@
 //    var host = "http://localhost:8080";
     var captchaRequest = {};
 
+    function changeLocation(role) {
+
+        if(role){
+
+            var page = "index";
+
+            switch (role){
+                case "bank":
+                case "agent":
+                case "investor":
+                    page = "18";
+                    break;
+                case "portfolio":
+                case "lists":
+                    page = "19";
+                    break;
+                case "yur":
+                    page = "25";
+                    break;
+                case "reg-bank":
+                    page = "18";
+                    break;
+                case "portfolio-bank":
+                    page = "181";
+                    break;
+                case "order-list":
+                    page = "inspector_order_list";
+                    break;
+                case "scoring-results":
+                    page = "inspector_scoring_results";
+                    break;
+                case "roller":
+                    window.location.href = "https://shvyrev.github.io/site/";
+                    return;
+                    break;
+                case "image":
+                    window.location.href = "https://shvyrev.github.io/adminpanel/images/BankVipis.gif";
+                    return;
+                    break;
+            }
+
+            window.location.href = "https://shvyrev.github.io/adminpanel/" + page + ".html";
+        }
+    }
 
     function reloadPage() {
         window.location.reload(true);
@@ -217,6 +276,30 @@
 //                console.log("fail:", e);
             })
     }
+
+    function unlogin() {
+        $.removeCookie("bankex_role");
+//        window.location.href = host;
+        changeLocation("home");
+    }
+
+    $(function () {
+
+        $("#unlogin-button").click(function () {
+            unlogin()
+        });
+
+        $("#order-list").click(function () {
+            changeLocation("order-list");
+        });
+
+        $("#roller").click(function () {
+            changeLocation("roller");
+        });
+        $("#scoring-results").click(function () {
+            changeLocation("scoring-results");
+        });
+    })
 
     $('#captcha-modal').on('shown.bs.modal', function () {
         $('#captcha-text').val("");
